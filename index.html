@@ -114,6 +114,23 @@ footer{border-top:4px solid;border-image:linear-gradient(90deg,var(--c1),var(--c
 #lb{position:fixed;inset:0;z-index:50;display:none;place-items:center;background:rgba(4,12,22,.88);padding:4vw;cursor:zoom-out}
 #lb.on{display:grid}
 #lb img{max-width:100%;max-height:100%;border-radius:12px}
+#colors{background:linear-gradient(135deg,color-mix(in srgb,var(--c3) 12%,var(--bg)),color-mix(in srgb,var(--c2) 12%,var(--bg)))}
+.cgrid{display:grid;grid-template-columns:minmax(280px,.9fr) 1.4fr;gap:34px;margin-top:30px;align-items:start}
+.cview{position:sticky;top:84px;border-radius:20px;background:var(--bg2);border-bottom:5px solid var(--c3);box-shadow:0 24px 50px -24px rgba(11,37,64,.5);overflow:hidden}
+#stage2{height:min(56vh,460px);cursor:grab;touch-action:pan-y;background:radial-gradient(60% 60% at 50% 55%,color-mix(in srgb,var(--c1) 22%,transparent),transparent 75%)}
+#stage2 canvas{display:block;width:100%;height:100%}
+.cinfo{display:flex;align-items:center;gap:12px;padding:14px 18px}
+.cinfo div{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3}
+.cinfo small{color:var(--mute)}
+.dot{width:34px;height:34px;border-radius:50%;border:3px solid var(--line);background:#0c0f14;flex:none}
+.cinfo .btn{padding:8px 18px;cursor:pointer;font:inherit;font-weight:600}
+.pal h3{font-size:.95rem;color:var(--mute);margin:20px 0 8px}
+.pal h3:first-child{margin-top:0}
+.sw{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.sw button{aspect-ratio:1;border-radius:14px;border:3px solid var(--line);cursor:pointer;padding:0;transition:transform .15s,box-shadow .15s}
+.sw button:hover{transform:translateY(-3px) scale(1.06)}
+.sw button[aria-pressed="true"]{border-color:var(--ink);box-shadow:0 0 0 3px var(--teal)}
+@media(max-width:860px){.cgrid{grid-template-columns:1fr}.cview{position:static}}
 </style>
 </head>
 <body>
@@ -122,7 +139,7 @@ footer{border-top:4px solid;border-image:linear-gradient(90deg,var(--c1),var(--c
     <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="42" fill="none" stroke="#0a4da3" stroke-width="7"/><circle cx="50" cy="8" r="6" fill="#00d3bd"/><circle cx="50" cy="92" r="6" fill="#00d3bd"/><circle cx="14" cy="29" r="6" fill="#0a4da3"/><circle cx="86" cy="29" r="6" fill="#0a4da3"/><circle cx="14" cy="71" r="6" fill="#0a4da3"/><circle cx="86" cy="71" r="6" fill="#0a4da3"/><path d="M56 20 30 54h17l-6 26 29-39H53z" fill="#00a99d"/></svg>
     <span>VOLT<b>UZE</b></span>
   </a>
-  <ul><li><a href="#product">Product</a></li><li><a href="#how">How it works</a></li><li><a href="#gallery">Gallery</a></li><li><a href="#specs">Specifications</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul>
+  <ul><li><a href="#product">Product</a></li><li><a href="#colors">Colours</a></li><li><a href="#how">How it works</a></li><li><a href="#gallery">Gallery</a></li><li><a href="#specs">Specifications</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul>
 </nav>
 
 <header class="hero" id="top">
@@ -130,7 +147,7 @@ footer{border-top:4px solid;border-image:linear-gradient(90deg,var(--c1),var(--c
     <div class="tag">Energizing Ideas into Reality</div>
     <h1>Water, on tap.<br><span>Engineered.</span></h1>
     <p>VOLTUZE gives every person a fresh glass of water, automatically. Connect it to a water can and it fills two glasses on the tray and waits until you take one. Designed and made in India.</p>
-    <div class="btns"><a class="btn" href="#contact">Enquire now</a><a class="btn alt" href="#product">See features</a></div>
+    <div class="btns"><a class="btn" href="#contact">Enquire now</a><a class="btn alt" href="#product">See features</a><a class="btn alt" href="#colors">Choose colour</a></div>
   </div>
   <div id="stage" role="img" aria-label="Interactive 3D model of the VOLTUZE water dispenser. Drag to rotate.">
     <div class="hint">Drag to rotate · <span id="st">Ready</span></div>
@@ -150,6 +167,20 @@ footer{border-top:4px solid;border-image:linear-gradient(90deg,var(--c1),var(--c
       <div><h3>Standard power inlet</h3><p>A detachable mains socket on the back makes installation and service simple.</p></div>
       <div><h3>Water can connection</h3><p>A pipe at the back of the machine draws water from a water can.</p></div>
       <div><h3>Made in India</h3><p>Designed and manufactured by JS Enterprises to global quality standards.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="colors">
+  <div class="wrap">
+    <h2>Choose your colour</h2>
+    <p class="lead">Pick any of the 126 colours below and the 3D dispenser changes to match. Drag the model to turn it.</p>
+    <div class="cgrid">
+      <div class="cview">
+        <div id="stage2" role="img" aria-label="3D preview of the dispenser in the chosen colour. Drag to rotate."></div>
+        <div class="cinfo"><span class="dot" id="cdot"></span><div><strong id="cname">Original black</strong><small id="chex">#0C0F14</small></div><button type="button" id="creset" class="btn alt">Reset</button></div>
+      </div>
+      <div id="pal" class="pal"></div>
     </div>
   </div>
 </section>
@@ -336,23 +367,67 @@ var rings=[0x00c2ff,0xff5ca8].map(function(cc,k){var r=new THREE.Mesh(new THREE.
 var led=box(2.6,0.05,0.05,-0.525,1.52,0.62,new THREE.MeshBasicMaterial({color:0x00c2ff}));
 var mx=0,my=0;
 stage.addEventListener('pointermove',function(e){var r=stage.getBoundingClientRect();mx=(e.clientX-r.left)/r.width-0.5;my=(e.clientY-r.top)/r.height-0.5;});
-function size(){
-  var w=stage.clientWidth,h=stage.clientHeight;
-  renderer.setSize(w,h,false);camera.aspect=w/h;
-  camera.position.set(0,1.2,w/h<0.9?15:10.5);camera.lookAt(0,0.3,0);
-  camera.updateProjectionMatrix();
+var stage2=document.getElementById('stage2'),renderer2=null,camera2=null,vis2=false;
+if(stage2){
+  renderer2=new THREE.WebGLRenderer({antialias:true,alpha:true});
+  renderer2.setPixelRatio(Math.min(devicePixelRatio,2));
+  stage2.appendChild(renderer2.domElement);
+  camera2=new THREE.PerspectiveCamera(35,1,0.1,100);
+  if('IntersectionObserver' in window)new IntersectionObserver(function(es){vis2=es[0].isIntersecting;}).observe(stage2);else vis2=true;
 }
+function fitView(st,rd,cam){
+  var w=st.clientWidth,h=st.clientHeight;if(!w||!h)return;
+  rd.setSize(w,h,false);cam.aspect=w/h;
+  cam.position.set(0,1.2,w/h<0.9?15:(st===stage?10.5:11.5));cam.lookAt(0,0.3,0);
+  cam.updateProjectionMatrix();
+}
+function size(){fitView(stage,renderer,camera);if(renderer2)fitView(stage2,renderer2,camera2);}
 size();addEventListener('resize',size);
 
 var rotY=-0.5,vel=0,drag=false,lastX=0;
 stage.addEventListener('pointerdown',function(e){drag=true;lastX=e.clientX;vel=0;stage.setPointerCapture(e.pointerId);});
 stage.addEventListener('pointermove',function(e){if(!drag)return;var d=(e.clientX-lastX)*0.01;rotY+=d;vel=d;lastX=e.clientX;});
 ['pointerup','pointercancel'].forEach(function(n){stage.addEventListener(n,function(){drag=false;});});
+if(stage2){
+  stage2.addEventListener('pointerdown',function(e){drag=true;lastX=e.clientX;vel=0;stage2.setPointerCapture(e.pointerId);});
+  stage2.addEventListener('pointermove',function(e){if(!drag)return;var d=(e.clientX-lastX)*0.01;rotY+=d;vel=d;lastX=e.clientX;});
+  ['pointerup','pointercancel'].forEach(function(n){stage2.addEventListener(n,function(){drag=false;});});
+}
 
+var FAM=[["Reds",[["Very Pale Coral","#ffeee6"],["Soft Pastel Red","#fde0dc"],["Gentle Rose Tint","#fececa"],["Bright Primary Red","#fb0301"],["Medium Crimson","#eb0100"],["Rich Vermilion","#d70100"],["Deep Scarlet Red","#b90101"],["Dark Red","#910101"],["Deep Maroon","#7e0202"],["Rich Burgundy","#5f0101"],["Darkest Cherry Red","#470101"],["Very Dark Berry Red","#370100"],["Darkest Berry Red","#280201"],["Deepest Wine Red","#160201"]]],["Greens",[["Very Pale Mint Green Tint","#f0fdf3"],["Light Celadon Green","#e3f0e6"],["Soft Pale Sage","#c2d0d0"],["Gentle Moss","#a2cc60"],["Bright Primary Green","#8efa0e"],["Medium Kelly Green","#35c937"],["Vibrant Emerald Green","#228528"],["Deep Fern Green","#39ab6f"],["Dark Olive Green","#7d8923"],["Forest Green","#228127"],["Rich Hunter Green","#015404"],["Dark Moss Green","#5f6622"],["Deep Forest Green","#304e32"],["Very Dark Pine Green","#182619"]]],["Purples",[["Very Pale Lavender","#f5e9f7"],["Soft Lilac Tint","#e5c2ec"],["Gentle Wisteria","#cf96da"],["Bright Primary Violet","#b965c3"],["Medium Purple","#aa49bc"],["Rich Royal Purple","#972cad"],["Deep Plum","#8c26a5"],["Dark Eggplant","#731f98"],["Deep Grape","#631b8b"],["Rich Violet","#451881"],["Darkest Ametrine","#2f1985"],["Very Dark Indigo","#2a2c7f"],["Very Dark Violet","#24317f"],["Deepest Wine-Violet","#19226d"]]],["Blues",[["Very Pale Indigo","#e7f1fd"],["Light Sky Indigo","#c9e3fc"],["Soft Periwinkle","#9fcafd"],["Gentle Indigo","#71b1fb"],["Bright Indigo","#4699f7"],["Medium Sky Blue","#1c7df2"],["Primary Indigo","#0268ee"],["Rich Indigo","#025cd7"],["Deep Sea Blue","#014abd"],["Dark Indigo","#0043ae"],["Midnight Blue","#00399d"],["Navy Blue","#012e89"],["Deep Navy","#002576"],["Ink Black Indigo","#001a64"]]],["Blacks and charcoals",[["Very Pale Charcoal Tint","#f5f5f5"],["Light Dove Gray","#e2e4e1"],["Soft Pale Pewter","#c2cece"],["Gentle Steel Gray","#a6a8a5"],["Bright Primary Charcoal","#6b6b6b"],["Medium Slate","#505050"],["Vibrant Obsidian Black","#010101"],["Deep Ink Black","#343434"],["Dark Slate Black","#2c4b4d"],["Forest Obsidian","#171717"],["Rich Midnight Black","#0b0b0b"],["Dark Abyss Black","#060606"],["Deep Void Black","#040402"],["Very Dark Jet Black","#010101"]]],["Whites and greys",[["Absolute White","#ffffff"],["Bright White","#f6f7f9"],["Soft White","#e8ecef"],["Light Gray","#dce1e4"],["Pale Gray","#ccd3db"],["Cool Gray","#aab5bb"],["Neutral Gray","#838e94"],["Medium Gray","#687379"],["Dark Gray","#465157"],["Charcoal Gray","#30373f"],["Deep Graphite","#212629"],["Dark Charcoal","#181b20"],["Graphite Black","#101518"],["Matte Black","#070c0f"]]],["Sky and deep blues",[["Very Pale Cloud Tint","#f3f9f9"],["Light Sky-Blue Gray","#e2f4fe"],["Soft Pale Cyan-Blue","#b4dfe5"],["Gentle Azure Gray","#8ccee8"],["Bright Primary Cerulean","#4373e1"],["Medium Cobalt Gray","#171a6b"],["Vibrant Royal Blue","#0005c1"],["Deep Steel Blue","#447fab"],["Dark Slate Blue","#6358c0"],["Forest Midnight","#191c69"],["Rich Midnight Blue","#191a5d"],["Dark Abyss Blue","#00036e"],["Deep Void Blue","#00036e"],["Very Dark Jet Blue","#13185a"]]],["Yellows and golds",[["Very Pale Yellow","#fbf7d1"],["Light Sun Yellow","#fbf5dd"],["Soft Butter Yellow","#fbf297"],["Gentle Goldenrod","#fced90"],["Bright Primary Yellow","#fdda06"],["Medium Sunshine","#fcc02a"],["Golden Yellow","#fcb817"],["Rich Gold","#ecd704"],["Deep Amber Yellow","#dca31e"],["Dark Mustard Yellow","#cc930e"],["Deep Golden Hue","#b4830d"],["Rich Ochre","#9b7208"],["Dark Saffron Yellow","#865906"],["Deep Golden Brown","#724e04"]]],["Oranges",[["Very Pale Apricot Tint","#fbf3e0"],["Soft Pastel Orange","#ffe0b1"],["Gentle Peach Red","#fecf87"],["Bright Primary Orange","#fe9404"],["Medium Orange","#fc8704"],["Rich Amber","#f77b01"],["Deep Blaze Orange","#f06601"],["Dark Orange","#e05102"],["Deep Sunset Orange","#d2400f"],["Rich Burnt Orange","#bb330b"],["Darkest Terra Cotta","#7e3200"],["Very Dark Russet","#642a02"],["Deepest Sepia Orange","#502502"],["Obsidian Orange","#411f03"]]]];
+var tgt=black.color.clone(),curBtn=null,picked=false,dTgt=new THREE.Color(),wTgt=new THREE.Color(),oDark=new THREE.Color(0x15181d),oWhite=new THREE.Color(0xf2f5f7);
+var pal=document.getElementById('pal'),cname=document.getElementById('cname'),chex=document.getElementById('chex'),cdot=document.getElementById('cdot');
+function setCol(name,hex,btn){
+  if(curBtn)curBtn.setAttribute('aria-pressed','false');
+  curBtn=btn;if(btn)btn.setAttribute('aria-pressed','true');
+  tgt.set(hex);picked=!!btn;
+  var r=parseInt(hex.substr(1,2),16),g=parseInt(hex.substr(3,2),16),b=parseInt(hex.substr(5,2),16);
+  var lum=(0.2126*r+0.7152*g+0.0722*b)/255;
+  black.metalness=btn?0.15:0.4;
+  plate.material.color.set(lum>0.5?0x1f2933:0xffffff);
+  cname.textContent=name;chex.textContent=hex.toUpperCase();cdot.style.background=hex;
+}
+if(pal){
+  FAM.forEach(function(f){
+    var h=document.createElement('h3');h.textContent=f[0];
+    var w=document.createElement('div');w.className='sw';
+    f[1].forEach(function(c){
+      var b=document.createElement('button');b.type='button';b.style.background=c[1];
+      b.title=c[0];b.setAttribute('aria-label',c[0]);b.setAttribute('aria-pressed','false');
+      b.addEventListener('click',function(){setCol(c[0],c[1],b);});
+      w.appendChild(b);
+    });
+    pal.appendChild(h);pal.appendChild(w);
+  });
+  document.getElementById('creset').addEventListener('click',function(){setCol('Original black','#0c0f14',null);});
+}
 var t0=performance.now();
 (function loop(now){
   requestAnimationFrame(loop);
   var t=(now-t0)/1000;
+  black.color.lerp(tgt,0.12);
+  if(picked){dTgt.copy(tgt).multiplyScalar(0.8);wTgt.copy(tgt).lerp(oWhite,0.6);}else{dTgt.copy(oDark);wTgt.copy(oWhite);}
+  dark.color.lerp(dTgt,0.12);white.color.lerp(wTgt,0.12);
   if(!drag){
     if(!reduce)rotY+=0.004+vel;
     vel*=0.94;
@@ -372,6 +447,7 @@ var t0=performance.now();
   txt=(sa==='take'||sb==='take')?'Glass taken':(sa==='drop'||sb==='drop')?'Dropping a glass':stream.visible?'Filling a glass':(dg.visible||dg2.visible)?'Ready. Waiting for pickup':'Next glass coming';
   if(txt!==stTxt&&stEl){stTxt=txt;stEl.textContent=txt;}
   renderer.render(scene,camera);
+  if(renderer2&&vis2)renderer2.render(scene,camera2);
 })(performance.now());
 })();
 </script>
